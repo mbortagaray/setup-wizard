@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup - Credenciais Google</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eee;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 15px;
+            left: 30px;
+            right: 30px;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+        }
+
+        .progress-line-fill {
+            height: 100%;
+            background: #4285f4;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .step-indicator {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: #666;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .step-indicator.active {
+            background: #4285f4;
+            color: white;
+        }
+
+        .step-indicator.completed {
+            background: #34a853;
+            color: white;
+        }
+
+        .content {
+            padding: 30px;
+            min-height: 400px;
+        }
+
+        .step {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-title {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-title .icon {
+            font-size: 24px;
+        }
+
+        .step-description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .instruction-box {
+            background: #f0f4ff;
+            border-left: 4px solid #4285f4;
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            margin-bottom: 20px;
+        }
+
+        .instruction-box h4 {
+            color: #4285f4;
+            margin-bottom: 10px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .instruction-box ol {
+            margin-left: 20px;
+            color: #333;
+            line-height: 2;
+        }
+
+        .link-box {
+            background: #e8f5e9;
+            border: 2px solid #34a853;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .link-box a {
+            color: #34a853;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .link-box a:hover {
+            text-decoration: underline;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #4285f4;
+        }
+
+        .input-group textarea {
+            min-height: 150px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .input-group .hint {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            cursor: pointer;
+            color: #333;
+        }
+
+        .success-box {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-box .checkmark {
+            width: 80px;
+            height: 80px;
+            background: #34a853;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            color: white;
+        }
+
+        .success-box h2 {
+            color: #34a853;
+            margin-bottom: 10px;
+        }
+
+        .success-box p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .success-box .summary {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .success-box .summary h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .success-box .summary p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .footer {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-primary {
+            background: #4285f4;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #3367d6;
+        }
+
+        .btn-success {
+            background: #34a853;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #2d8f4a;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e0e0e0;
+            border-top-color: #4285f4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 0;
+            }
+
+            .card {
+                border-radius: 0;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .footer {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>Configurar Credenciais Google</h1>
+                <p>Siga os passos abaixo para configurar sua automação</p>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-steps">
+                    <div class="progress-line">
+                        <div class="progress-line-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                    <div class="step-indicator active" data-step="1">1</div>
+                    <div class="step-indicator" data-step="2">2</div>
+                    <div class="step-indicator" data-step="3">3</div>
+                    <div class="step-indicator" data-step="4">4</div>
+                    <div class="step-indicator" data-step="5">5</div>
+                    <div class="step-indicator" data-step="6">6</div>
+                </div>
+            </div>
+
+            <div class="content">
+                <!-- Passo 1: Boas Vindas -->
+                <div class="step active" data-step="1">
+                    <div class="step-title">
+                        <span class="icon">👋</span>
+                        Bem-vindo!
+                    </div>
+                    <div class="step-description">
+                        Vamos configurar suas credenciais Google OAuth. Este processo é necessário para que sua automação possa acessar os serviços do Google.
+                    </div>
+
+                    <div class="instruction-box">
+                        <h4>O que você vai precisar:</h4>
+                        <ol>
+                            <li>Uma conta Google (Gmail)</li>
+                            <li>Acesso ao Google Cloud Console</li>
+                            <li>10-15 minutos do seu tempo</li>
+                        </ol>
+                    </div>
+
+                    <div class="instruction-box">
+                        <h4>O que vamos fazer:</h4>
+                        <ol>
+                            <li>Criar um projeto no Google Cloud</li>
+                            <li>Ativar as APIs necessárias</li>
+                            <li>Configurar a tela de consentimento</li>
+                            <li>Gerar as credenciais OAuth</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Passo 2: Criar Projeto -->
+                <div class="step" data-step="2">
+                    <div class="step-title">
+                        <span class="icon">📁</span>
+                        Passo 1: Criar Projeto no Google Cloud
+                    </div>
+                    <div class="step-description">
+                        Primeiro, você precisa criar um projeto no Google Cloud Console. Um projeto organiza todos os recursos do Google Cloud.
+                    </div>
+
+                    <div class="link-box">
+                        <a href="https://console.cloud.google.com/projectcreate" target="_blank" onclick="markLinkOpened(2)">
+                            🔗 Abrir Google Cloud Console - Criar Projeto
+                        </a>
+                    </div>
+
+                    <div class="instruction-box">
+                        <h4>Instruções:</h4>
+                        <ol>
+                            <li>Clique no link acima</li>
+                            <li>Clique em <strong>"CREATE PROJECT"</strong> (Criar Projeto)</li>
+                            <li>Digite um nome para o projeto (ex: <code>minha-automacao</code>)</li>
+                            <li>Em "Organization", selecione <strong>"No organization"</strong></li>
+                            <li>Clique em <strong>"CREATE"</strong></li>
+                            <li>Aguarde a confirmação verde no topo</li>
+                        </ol>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="projectId">Cole o ID do projeto aqui:</label>
+                        <input type="text" id="projectId" placeholder="Ex: minha-automacao-123456">
+                        <p class="hint">O ID aparece na tela do projeto ou na barra de endereço</p>
+                    </div>
+                </div>
+
+                <!-- Passo 3: Ativar APIs -->
+                <div class="step" data-step="3">
+                    <div class="step-title">
+                        <span class="icon">🔗</span>
+                        Passo 2: Ativar APIs do Google
+                    </div>
+                    <div class="step-description">
+                        Agora você precisa ativar as APIs que sua automação vai usar. Cada API dá acesso a um serviço diferente.
+                    </div>
+
+                    <div class="link-box">
+                        <a href="https://console.cloud.google.com/apis/library" target="_blank" onclick="markLinkOpened(3)">
+                            🔗 Abrir Biblioteca de APIs
+                        </a>
+                    </div>
+
+                    <div class="instruction-box">
+                        <h4>Selecione seu projeto:</h4>
+                        <ol>
+                            <li>No menu superior esquerdo, clique no seletor de projeto</li>
+                            <li>Selecione o projeto que você acabou de criar</li>
+                            <li>Você verá o nome do projeto no topo da página</li>
+                        </ol>
+                    </div>
+
+                    <div class="instruction-box">
+                        <h4>Ativar APIs (escolha as que sua automação precisa):</h4>
+                        <ol>
+                            <li>Pesquise e ative <strong>Gmail API</strong> (para automações de email)</li>
+                            <li>Pesquise e ative <strong>Google Sheets API</strong> (para planilhas)</li>
+                            <li>Pesquise e ative <strong>Google Drive API</strong> (para arquivos)</li>
+                            <li>Clique na API → "ENABLE"</li>
+                        </ol>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="enabledApis">Quais APIs você ativou?</label>
+                        <input type="text" id="enabledApis" placeholder="Ex: Gmail API, Google Sheets API">
+                    </div>
+                </div>
+
+                <!-- Passo 4: Tela de Consentimento -->
+                <div class="step" data-step="4">
+                    <div class="step-title">
+                        <span class="icon">🖥️</span>
+                        Passo 3: Configurar Tela de Consentimento
+                    </div>
+                    <div class="step-description">
+                        A tela de consentimento aparece quando alguém tenta fazer login com sua conta. Vamos configurar isso.
+                    </div>
+
+                    <div class="link-box">
+                        <a href="https://console.cloud.google.com/apis/credentials/consent" target="_blank" onclick="markLinkOpened(4)">
+                            🔗 Abrir Tela de Consentimento OAuth
+                        </a>
+                    </div>
+
+                    <div class="instruction-box">
+                        <h4>Instruções:</h4>
+                        <ol>
+                            <li>Selecione seu projeto no topo</li>
+                            <li>Selecione <strong>"External"</strong></li>
+                            <li>Clique <strong>"CREATE"</strong></li>
+                            <li>Preencha:
+                                <ul style="margin-left: 20px; margin-top: 5px;">
+                                    <li>App name: <code>Automacao n8n</code></li>
+                                    <li>User support email: seu email</li>
+                                </ul>
+                            </li>
+                            <li>Clique <strong>"SAVE AND CONTINUE"</strong></li>
+                            <li>Na página de Scopes, clique <strong>"ADD OR REMOVE SCOPES"</strong></li>
+                            <li>Selecione as scopes (permissões) que você precisa</li>
+                            <li>Clique <strong>"UPDATE"</strong> → <strong>"SAVE AND CONTINUE"</strong></li>
+                            <li>Adicione seu email como Test User</li>
+                            <li>Clique <strong>"SAVE AND CONTINUE"</strong></li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Passo 5: Criar Credenciais -->
+                <div class="step" data-step="5">
+                    <div class="step-title">
+                        <span class="icon">🔑</span>
+                        Passo 4: Criar Credenciais OAuth
+                    </div>
+                    <div class="step-description">
+                        Agora vamos criar o arquivo de credenciais que você vai usar no n8n.
+                    </div>
+
+                    <div class="link-box">
+                        <a href="https://console.cloud.google.com/apis/credentials" target="_blank" onclick="markLinkOpened(5)">
+                            🔗 Abrir Credenciais
+                        </a>
+                    </div>
+
+                    <div class="instruction-box">
+                        <h4>Instruções:</h4>
+                        <ol>
+                            <li>Selecione seu projeto no topo</li>
+                            <li>Clique <strong>"+ CREATE CREDENTIALS"</strong></li>
+                            <li>Selecione <strong>"OAuth client ID"</strong></li>
+                            <li>Em "Application type", selecione <strong>"Web application"</strong></li>
+                            <li>No campo "Name", digite: <code>Automacao-n8n</code></li>
+                            <li>Clique <strong>"CREATE"</strong></li>
+                        </ol>
+                    </div>
+
+                    <div class="instruction-box" style="background: #fff3cd; border-color: #ffc107;">
+                        <h4 style="color: #856404;">⚠️ Importante:</h4>
+                        <p style="color: #856404;">Após clicar CREATE, vai aparecer um popup com seu <strong>Client ID</strong> e <strong>Client Secret</strong>. Você também pode clicar em <strong>"Download JSON"</strong>.</p>
+                        <p style="color: #856404; margin-top: 10px;"><strong>Copie ambos ou baixe o arquivo!</strong></p>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="clientId">Client ID:</label>
+                        <input type="text" id="clientId" placeholder="Ex: 123456789-xxxxxxxx.apps.googleusercontent.com">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="clientSecret">Client Secret:</label>
+                        <input type="text" id="clientSecret" placeholder="Ex: GOCSPX-xxxxxxxxxx">
+                    </div>
+                </div>
+
+                <!-- Passo 6: Enviar -->
+                <div class="step" data-step="6">
+                    <div class="step-title">
+                        <span class="icon">📤</span>
+                        Passo 5: Enviar Credenciais
+                    </div>
+                    <div class="step-description">
+                        Almost lá! Cole o conteúdo do arquivo JSON de credenciais abaixo para finalizar.
+                    </div>
+
+                    <div class="instruction-box">
+                        <h4>Como obter o JSON:</h4>
+                        <ol>
+                            <li>Se você já baixou o JSON: abra no Bloco de Notas e copie tudo</li>
+                            <li>Se não baixou: copie o Client ID e Client Secret do popup</li>
+                        </ol>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="credentialsJson">Cole o JSON aqui:</label>
+                        <textarea id="credentialsJson" placeholder='{"installed":{"client_id":"...","client_secret":"...","redirect_uris":["urn:ietf:wg:oauth:2.0:oob"]}}'></textarea>
+                        <p class="hint">Se preferir, pode colar apenas o Client ID e Client Secret nos campos acima</p>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="email">Seu email para confirmarmos:</label>
+                        <input type="email" id="email" placeholder="seuemail@email.com">
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="terms">
+                        <label for="terms">Li e concordo em enviar minhas credenciais para configuração da automação</label>
+                    </div>
+                </div>
+
+                <!-- Sucesso -->
+                <div class="step" data-step="7">
+                    <div class="success-box">
+                        <div class="checkmark">✓</div>
+                        <h2>Credenciais Enviadas!</h2>
+                        <p>Suas credenciais foram recebidas com sucesso.</p>
+                        <p>Você receberá um email de confirmação em breve.</p>
+
+                        <div class="summary" id="summaryBox">
+                            <h4>Resumo:</h4>
+                            <p><strong>Projeto:</strong> <span id="summaryProject">-</span></p>
+                            <p><strong>APIs:</strong> <span id="summaryApis">-</span></p>
+                            <p><strong>Email:</strong> <span id="summaryEmail">-</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading -->
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Enviando credenciais...</p>
+                </div>
+            </div>
+
+            <div class="footer">
+                <button class="btn btn-secondary" id="btnBack" onclick="prevStep()" style="display: none;">
+                    ← Voltar
+                </button>
+                <button class="btn btn-primary" id="btnNext" onclick="nextStep()">
+                    Próximo →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 6;
+        const linksOpened = {};
+
+        // ============================================
+        // CONFIGURAÇÃO DO WEBHOOK
+        // Substitua pelo seu webhook do n8n
+        // Ex: https://seu-n8n.com/webhook/google-credentials
+        // ============================================
+        const WEBHOOK_URL = 'COLE_SEU_WEBHOOK_URL_AQUI';
+
+        function updateProgress() {
+            const progress = ((currentStep - 1) / totalSteps) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+                const stepNum = index + 1;
+                indicator.classList.remove('active', 'completed');
+
+                if (stepNum < currentStep) {
+                    indicator.classList.add('completed');
+                    indicator.innerHTML = '✓';
+                } else if (stepNum === currentStep) {
+                    indicator.classList.add('active');
+                    indicator.innerHTML = stepNum;
+                } else {
+                    indicator.innerHTML = stepNum;
+                }
+            });
+
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+            document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('active');
+
+            document.getElementById('btnBack').style.display = currentStep > 1 && currentStep < 7 ? 'flex' : 'none';
+
+            const btnNext = document.getElementById('btnNext');
+            if (currentStep === 6) {
+                btnNext.innerHTML = '✓ Enviar';
+                btnNext.classList.remove('btn-primary');
+                btnNext.classList.add('btn-success');
+            } else {
+                btnNext.innerHTML = 'Próximo →';
+                btnNext.classList.remove('btn-success');
+                btnNext.classList.add('btn-primary');
+            }
+        }
+
+        function validateStep(step) {
+            switch(step) {
+                case 2:
+                    return document.getElementById('projectId').value.trim() !== '';
+                case 3:
+                    return document.getElementById('enabledApis').value.trim() !== '';
+                case 5:
+                    return document.getElementById('clientId').value.trim() !== '' &&
+                           document.getElementById('clientSecret').value.trim() !== '';
+                case 6:
+                    return document.getElementById('email').value.trim() !== '' &&
+                           document.getElementById('terms').checked;
+                default:
+                    return true;
+            }
+        }
+
+        function nextStep() {
+            if (!validateStep(currentStep) && currentStep < 7) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+
+            if (currentStep === 6) {
+                sendData();
+                return;
+            }
+
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateProgress();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateProgress();
+            }
+        }
+
+        function markLinkOpened(step) {
+            linksOpened[step] = true;
+        }
+
+        async function sendData() {
+            const loading = document.getElementById('loading');
+            document.querySelectorAll('.step').forEach(s => s.style.display = 'none');
+            loading.style.display = 'block';
+            document.getElementById('btnBack').style.display = 'none';
+            document.getElementById('btnNext').style.display = 'none';
+
+            const data = {
+                projectId: document.getElementById('projectId').value.trim(),
+                enabledApis: document.getElementById('enabledApis').value.trim(),
+                clientId: document.getElementById('clientId').value.trim(),
+                clientSecret: document.getElementById('clientSecret').value.trim(),
+                credentialsJson: document.getElementById('credentialsJson').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                currentStep = 7;
+                document.getElementById('summaryProject').textContent = data.projectId || 'Não informado';
+                document.getElementById('summaryApis').textContent = data.enabledApis || 'Não informado';
+                document.getElementById('summaryEmail').textContent = data.email || 'Não informado';
+
+                loading.style.display = 'none';
+                updateProgress();
+
+            } catch (error) {
+                alert('Erro ao enviar dados. Por favor, tente novamente.');
+                loading.style.display = 'none';
+                document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+                document.querySelector('.step[data-step="6"]').classList.add('active');
+                document.getElementById('btnBack').style.display = 'flex';
+                document.getElementById('btnNext').style.display = 'flex';
+            }
+        }
+
+        updateProgress();
+    </script>
+
+<script>
+/**
+ * Iframe 元素高亮注入脚本
+ * 需要在目标网站中引入此脚本来支持跨域 iframe 高亮功能
+ *
+ * 使用方法：
+ * 1. 将此脚本添加到目标网站的 HTML 中
+ * 2. 或通过浏览器扩展、用户脚本等方式注入
+ */
+
+(function () {
+  "use strict";
+
+  // 检查是否在 iframe 中
+  if (window.self === window.top) {
+    return; // 不在 iframe 中，不执行
+  }
+
+  // 检查是否已经初始化过
+  if (window.__iframeHighlightInitialized) {
+    return;
+  }
+  window.__iframeHighlightInitialized = true;
+  console.log("Iframe 高亮脚本已加载");
+
+  // 创建高亮覆盖层
+  var overlay = document.createElement("div");
+  overlay.id = "iframe-highlight-overlay";
+  overlay.style.cssText = "\n    position: fixed;\n    top: 0;\n    left: 0;\n    width: 100vw;\n    height: 100vh;\n    pointer-events: none;\n    z-index: 999999;\n    overflow: hidden;\n  ";
+
+  // 创建悬停高亮框（虚线边框）
+  var highlightBox = document.createElement("div");
+  highlightBox.id = "iframe-highlight-box";
+  highlightBox.style.cssText = "\n    position: absolute;\n    border: 2px dashed #007AFF;\n    background: rgba(0, 122, 255, 0.08);\n    pointer-events: none;\n    display: none;\n    transition: all 0.1s ease;\n    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8);\n    border-radius: 2px;\n  ";
+
+  // 创建选中节点的常驻高亮框（实线边框）
+  var selectedBox = document.createElement("div");
+  selectedBox.id = "iframe-selected-box";
+  selectedBox.style.cssText = "\n    position: absolute;\n    border: 2px solid #007AFF;\n    pointer-events: none;\n    display: none;\n    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9), 0 0 8px rgba(255, 107, 53, 0.4);\n    border-radius: 2px;\n    z-index: 1000000;\n  ";
+
+  // 创建悬停标签显示
+  var tagLabel = document.createElement("div");
+  tagLabel.id = "iframe-tag-label";
+  tagLabel.style.cssText = "\n    position: absolute;\n    background: #007AFF;\n    color: white;\n    padding: 2px 6px;\n    font-size: 11px;\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;\n    border-radius: 2px;\n    pointer-events: none;\n    display: none;\n    white-space: nowrap;\n    z-index: 1000001;\n    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);\n    font-weight: 500;\n  ";
+
+  // 创建选中节点标签
+  var selectedLabel = document.createElement("div");
+  selectedLabel.id = "iframe-selected-label";
+  selectedLabel.style.cssText = "\n    position: absolute;\n    background: #007AFF;\n    color: white;\n    padding: 3px 8px;\n    font-size: 11px;\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;\n    border-radius: 3px;\n    pointer-events: none;\n    display: none;\n    white-space: nowrap;\n    z-index: 1000002;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);\n    font-weight: 600;\n  ";
+  overlay.appendChild(highlightBox);
+  overlay.appendChild(selectedBox);
+  overlay.appendChild(tagLabel);
+  overlay.appendChild(selectedLabel);
+  document.body.appendChild(overlay);
+
+  // 存储当前选中的元素
+  var selectedElement = null;
+  var highlightEnabled = false;
+
+  // 更新选中元素的高亮显示
+  function updateSelectedHighlight(element) {
+    console.log("updateSelectedHighlight called with:", element);
+    if (!element) {
+      selectedBox.style.display = "none";
+      selectedLabel.style.display = "none";
+      selectedElement = null;
+      console.log("Cleared selected highlight");
+      return;
+    }
+    selectedElement = element;
+    var rect = element.getBoundingClientRect();
+    console.log("Selected element rect:", rect);
+
+    // 更新选中高亮框位置
+    selectedBox.style.display = "block";
+    selectedBox.style.left = "".concat(rect.left - 2, "px");
+    selectedBox.style.top = "".concat(rect.top - 2, "px");
+    selectedBox.style.width = "".concat(rect.width + 4, "px");
+    selectedBox.style.height = "".concat(rect.height + 4, "px");
+
+    // 更新选中标签位置和内容
+    selectedLabel.style.display = "block";
+    selectedLabel.textContent = "\u2713 <".concat(element.tagName.toLowerCase(), ">");
+
+    // 计算标签位置，确保不超出视窗
+    var labelTop = rect.top - 28;
+    var labelLeft = rect.left;
+
+    // 如果标签会超出顶部，显示在元素下方
+    if (labelTop < 5) {
+      labelTop = rect.bottom + 5;
+    }
+
+    // 如果标签会超出右侧，向左调整
+    var labelWidth = selectedLabel.offsetWidth || 100; // 预估宽度
+    if (labelLeft + labelWidth > window.innerWidth - 10) {
+      labelLeft = window.innerWidth - labelWidth - 10;
+    }
+    selectedLabel.style.left = "".concat(Math.max(5, labelLeft), "px");
+    selectedLabel.style.top = "".concat(labelTop, "px");
+    console.log("Selected highlight positioned at:", {
+      left: selectedBox.style.left,
+      top: selectedBox.style.top,
+      width: selectedBox.style.width,
+      height: selectedBox.style.height
+    });
+  }
+  function getElementSelector(element) {
+    if (!(element instanceof Element)) throw new Error('Argument must be a DOM element');
+    var segments = [];
+    var current = element;
+    while (current !== document.documentElement) {
+      var selector = '';
+      // 优先检查唯一ID
+      if (current.id && document.querySelectorAll("#".concat(current.id)).length === 1) {
+        segments.unshift("#".concat(current.id));
+        break; // ID唯一，无需继续向上
+      }
+
+      // 生成类名选择器（取第一个有效类名）
+      var classes = Array.from(current.classList).filter(function (c) {
+        return !c.startsWith('js-');
+      });
+      var className = classes.length > 0 ? ".".concat(classes[0]) : '';
+
+      // 生成位置索引（nth-child）
+      var tag = current.tagName.toLowerCase();
+      if (!className) {
+        var siblings = Array.from(current.parentNode.children);
+        var index = siblings.findIndex(function (el) {
+          return el === current;
+        }) + 1;
+        selector = "".concat(tag, ":nth-child(").concat(index, ")");
+      } else {
+        selector = className;
+      }
+      segments.unshift(selector);
+      current = current.parentElement;
+    }
+
+    // 处理根元素
+    if (current === document.documentElement) {
+      segments.unshift('html');
+    }
+    return segments.join(' > ');
+  }
+
+  // 获取元素文本内容
+  function getElementText(element) {
+    var _element$textContent;
+    if (element.tagName === "INPUT") {
+      return element.value || element.placeholder || "";
+    }
+    if (element.tagName === "TEXTAREA") {
+      return element.value || element.placeholder || "";
+    }
+    var text = ((_element$textContent = element.textContent) === null || _element$textContent === void 0 ? void 0 : _element$textContent.trim()) || "";
+    return text.length > 50 ? text.substring(0, 50) + "..." : text;
+  }
+
+  // 获取元素属性信息
+  function getElementAttributes(element) {
+    var attrs = {};
+    for (var i = 0; i < element.attributes.length; i++) {
+      var attr = element.attributes[i];
+      attrs[attr.name] = attr.value;
+    }
+    return attrs;
+  }
+
+  // 鼠标悬停事件处理
+  function handleMouseOver(e) {
+    if (!highlightEnabled) return;
+    var target = e.target;
+    if (!target || target === overlay || target === highlightBox || target === tagLabel || target === selectedBox || target === selectedLabel) {
+      return;
+    }
+
+    // 避免高亮 html 和 body 元素
+    if (target === document.documentElement || target === document.body) {
+      return;
+    }
+
+    // 如果是已选中的元素，不显示悬停高亮
+    if (target === selectedElement) {
+      highlightBox.style.display = "none";
+      tagLabel.style.display = "none";
+      return;
+    }
+    var rect = target.getBoundingClientRect();
+    var selector = getElementSelector(target);
+    var text = getElementText(target);
+    var attributes = getElementAttributes(target);
+
+    // 更新悬停高亮框位置
+    highlightBox.style.display = "block";
+    highlightBox.style.left = "".concat(rect.left - 2, "px");
+    highlightBox.style.top = "".concat(rect.top - 2, "px");
+    highlightBox.style.width = "".concat(rect.width + 4, "px");
+    highlightBox.style.height = "".concat(rect.height + 4, "px");
+
+    // 更新标签位置和内容
+    tagLabel.style.display = "block";
+    tagLabel.textContent = "<".concat(target.tagName.toLowerCase(), ">");
+
+    // 计算标签位置，确保不超出视窗
+    var labelTop = rect.top - 22;
+    var labelLeft = rect.left;
+
+    // 如果标签会超出顶部，显示在元素下方
+    if (labelTop < 0) {
+      labelTop = rect.bottom + 5;
+    }
+
+    // 如果标签会超出右侧，向左调整
+    if (labelLeft + tagLabel.offsetWidth > window.innerWidth) {
+      labelLeft = window.innerWidth - tagLabel.offsetWidth - 5;
+    }
+    tagLabel.style.left = "".concat(Math.max(0, labelLeft), "px");
+    tagLabel.style.top = "".concat(labelTop, "px");
+
+    // 发送消息到父窗口
+    var elementInfo = {
+      tagName: target.tagName.toLowerCase(),
+      rect: {
+        left: rect.left,
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.bottom,
+        width: rect.width,
+        height: rect.height,
+        x: rect.x,
+        y: rect.y
+      },
+      selector: selector,
+      text: text,
+      attributes: attributes,
+      url: window.location.href,
+      path: window.location.pathname,
+      timestamp: Date.now()
+    };
+    try {
+      window.parent.postMessage({
+        type: "iframe-element-hover",
+        data: elementInfo,
+        source: "iframe-highlight-injector"
+      }, "*");
+    } catch (error) {
+      console.warn("无法发送消息到父窗口:", error);
+    }
+  }
+
+  // 鼠标离开事件处理
+  function handleMouseOut(e) {
+    if (!highlightEnabled) return;
+    var relatedTarget = e.relatedTarget;
+
+    // 如果鼠标移动到高亮相关元素上，不隐藏高亮
+    if (relatedTarget && (relatedTarget === highlightBox || relatedTarget === tagLabel || relatedTarget === overlay || relatedTarget === selectedBox || relatedTarget === selectedLabel)) {
+      return;
+    }
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    try {
+      window.parent.postMessage({
+        type: "iframe-element-hover",
+        data: null,
+        source: "iframe-highlight-injector"
+      }, "*");
+    } catch (error) {
+      console.warn("无法发送消息到父窗口:", error);
+    }
+  }
+
+  // 点击事件处理
+  function handleClick(e) {
+    var target = e.target;
+    if (!target || target === overlay || target === highlightBox || target === tagLabel || target === selectedBox || target === selectedLabel) {
+      return;
+    }
+
+    // 避免处理 html 和 body 元素
+    if (target === document.documentElement || target === document.body) {
+      return;
+    }
+
+    // 检查是否是交互元素，这些元素需要保留默认行为
+    var isInteractiveElement = ['input', 'textarea', 'select', 'button', 'a'].includes(target.tagName.toLowerCase());
+
+    // 如果高亮功能启用，对于非交互元素阻止默认行为和事件传播
+    if (highlightEnabled) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    var rect = target.getBoundingClientRect();
+    var selector = getElementSelector(target);
+    var text = getElementText(target);
+    var attributes = getElementAttributes(target);
+    console.log("Element clicked:", {
+      tagName: target.tagName,
+      selector: selector,
+      rect: rect
+    });
+
+    // 立即更新选中高亮
+    updateSelectedHighlight(target);
+
+    // 隐藏悬停高亮，因为现在是选中状态
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    var elementInfo = {
+      tagName: target.tagName.toLowerCase(),
+      rect: {
+        left: rect.left,
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.bottom,
+        width: rect.width,
+        height: rect.height,
+        x: rect.x,
+        y: rect.y
+      },
+      selector: selector,
+      text: text,
+      attributes: attributes,
+      url: window.location.href,
+      path: window.location.pathname,
+      timestamp: Date.now()
+    };
+    try {
+      window.parent.postMessage({
+        type: "iframe-element-click",
+        data: elementInfo,
+        source: "iframe-highlight-injector"
+      }, "*");
+    } catch (error) {
+      console.warn("无法发送消息到父窗口:", error);
+    }
+  }
+
+  // 监听来自父窗口的消息
+  function handleParentMessage(event) {
+    console.log("Received message from parent:", event.data);
+    if (event.data.type === "iframe-highlight-toggle") {
+      var enabled = event.data.enabled;
+      console.log("Highlight toggle:", enabled);
+      if (enabled) {
+        enableHighlight();
+      } else {
+        disableHighlight();
+      }
+    } else if (event.data.type === "enable-iframe-highlight") {
+      console.log("Enable iframe highlight");
+      enableHighlight();
+    } else if (event.data.type === "disable-iframe-highlight") {
+      console.log("Disable iframe highlight");
+      disableHighlight();
+    } else if (event.data.type === "toggle-iframe-highlight") {
+      var _enabled = event.data.enabled !== undefined ? event.data.enabled : !highlightEnabled;
+      console.log("Toggle iframe highlight to:", _enabled);
+      if (_enabled) {
+        enableHighlight();
+      } else {
+        disableHighlight();
+      }
+    } else if (event.data.type === "update-selected-element") {
+      var selector = event.data.selector;
+      console.log("Update selected element with selector:", selector);
+      if (selector) {
+        try {
+          var element = document.querySelector(selector);
+          console.log("Found element by selector:", element);
+          updateSelectedHighlight(element);
+        } catch (error) {
+          console.warn("Failed to select element:", error);
+          updateSelectedHighlight(null);
+        }
+      } else {
+        updateSelectedHighlight(null);
+      }
+    } else if (event.data.type === "clear-selected-element") {
+      console.log("Clear selected element");
+      updateSelectedHighlight(null);
+    }
+  }
+
+  // 启用高亮功能
+  function enableHighlight() {
+    console.log("Enabling highlight");
+    document.addEventListener("mouseover", handleMouseOver, true);
+    document.addEventListener("mouseout", handleMouseOut, true);
+    document.addEventListener("click", handleClick, true);
+    highlightEnabled = true;
+    overlay.style.display = "block";
+  }
+
+  // 禁用高亮功能
+  function disableHighlight() {
+    console.log("Disabling highlight");
+    highlightEnabled = false;
+    // 保持事件监听器，但通过 highlightEnabled 变量控制行为
+    // 这样可以保留选中状态的显示
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    // 不隐藏 selectedBox 和 selectedLabel，保留选中状态
+  }
+
+  // 完全禁用高亮功能（移除所有监听器）
+  function fullyDisableHighlight() {
+    console.log("Fully disabling highlight");
+    highlightEnabled = false;
+    document.removeEventListener("mouseover", handleMouseOver, true);
+    document.removeEventListener("mouseout", handleMouseOut, true);
+    document.removeEventListener("click", handleClick, true);
+    overlay.style.display = "none";
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    selectedBox.style.display = "none";
+    selectedLabel.style.display = "none";
+  }
+
+  // 添加事件监听
+  enableHighlight();
+  window.addEventListener("message", handleParentMessage);
+
+  // 暴露全局函数供外部调用
+  window.__iframeHighlightControl = {
+    enable: enableHighlight,
+    disable: disableHighlight,
+    fullyDisable: fullyDisableHighlight,
+    isEnabled: function isEnabled() {
+      return highlightEnabled;
+    },
+    getSelectedElement: function getSelectedElement() {
+      return selectedElement;
+    },
+    updateSelected: updateSelectedHighlight,
+    // 通过消息发送开关控制
+    sendToggleMessage: function sendToggleMessage(enabled) {
+      window.parent.postMessage({
+        type: 'iframe-highlight-status',
+        enabled: enabled || highlightEnabled,
+        source: 'iframe-highlight-injector'
+      }, '*');
+    }
+  };
+
+  // 通知父窗口脚本已加载
+  try {
+    window.parent.postMessage({
+      type: "iframe-highlight-ready",
+      data: {
+        url: window.location.href,
+        userAgent: navigator.userAgent,
+        timestamp: Date.now()
+      },
+      source: "iframe-highlight-injector"
+    }, "*");
+  } catch (error) {
+    console.warn("无法发送就绪消息到父窗口:", error);
+  }
+
+  // 清理函数
+  window.__iframeHighlightCleanup = function () {
+    fullyDisableHighlight();
+    window.removeEventListener("message", handleParentMessage);
+    if (overlay.parentElement) {
+      overlay.parentElement.removeChild(overlay);
+    }
+    delete window.__iframeHighlightInitialized;
+    delete window.__iframeHighlightCleanup;
+  };
+})();
+
+</script>
+</body>
+</html>
